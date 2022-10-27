@@ -81,6 +81,14 @@
             <Button Foreground="White" Margin="10 30 10 10" Command="{Binding SetDirectoryCommand}">Выбрать директорию</Button>
             <Button Foreground="White" Margin="10" Command="{Binding StartScanningCommand}">Начать сканирование</Button>
             <Button Foreground="White" Margin="10" Command="{Binding StopScanningCommand}">Остановить сканирование</Button>
+            <TextBlock Margin="30 10" FontFamily="Arial" FontSize="20" Foreground="White" Text="Root path: "/>
+            <TextBlock Margin="30 0" FontFamily="Arial" FontSize="20" Foreground="White" TextWrapping="Wrap" Text="{Binding DirectoryPath}"/>
+            <TextBlock Margin="30 0" FontFamily="Arial" FontSize="20" Foreground="White" Text="{Binding StringFormat=(\{0\} bytes\), Path=Tree.Root.Length}"/>
+
+
+
+
+
         </StackPanel>
         <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
             HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Black"/>

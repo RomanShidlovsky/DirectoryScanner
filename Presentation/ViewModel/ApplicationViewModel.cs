@@ -26,22 +26,26 @@ namespace Presentation.ViewModel
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
                     DirectoryPath = folderBrowserDialog.SelectedPath;
+                    Tree = null;
                 }
             });
 
             StartScanningCommand = new RelayCommand(_ =>
             {
+                IsScanning = true;
                 Task.Run(() =>
                 {
                     Core.Models.FileTree result = _scanner.Start(DirectoryPath, MaxThreadCount);
                     Tree = new Model.FileTree(result);
+                    IsScanning = false;
                 });
-            }, _ => _directoryPath != null && !_scanner.IsRunning);
+            }, _ => _directoryPath != null && !IsScanning);
 
             StopScanningCommand = new RelayCommand(_ =>
             {
                 _scanner.Stop();
-            }, _ => _scanner.IsRunning);
+                IsScanning = false;
+            }, _ => IsScanning);
         }
 
         private string _directoryPath;
@@ -66,8 +70,8 @@ namespace Presentation.ViewModel
             }
         }
 
-        private Model.FileTree _tree;
-        public Model.FileTree Tree
+        private Model.FileTree? _tree;
+        public Model.FileTree? Tree
         {
             get { return _tree; }
             private set
@@ -76,6 +80,17 @@ namespace Presentation.ViewModel
                 OnPropertyChanged("Tree");
             }
 
+        }
+
+        private bool _isScanning = false;
+        public bool IsScanning
+        {
+            get { return _isScanning; }
+            private set
+            {
+                _isScanning = value;
+                OnPropertyChanged("IsScanning");
+            }
         }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
