@@ -47,19 +47,20 @@ namespace Core.Services
             Task? task;
             while(!_waitNext.IsCompleted && !_token.IsCancellationRequested)
             {
-                bool result = _startQueue.TryDequeue(out task);
-                if (result && task != null)
+                task = _waitQueue.Where(t => t.Status == TaskStatus.Created).FirstOrDefault();
+                if (task != null)
                 {
                     try
                     {
                         _semaphore.Wait(_token);
                         task.Start();
                     }
-                    catch(OperationCanceledException)
+                    catch (OperationCanceledException)
                     {
-                        return;
+                        break;
                     }
-                }           
+                    
+                }
             }
         }
 
@@ -68,7 +69,7 @@ namespace Core.Services
             Task? task;
             while (!_waitQueue.IsEmpty && !_token.IsCancellationRequested)
             {
-                bool result = _waitQueue.TryDequeue(out task);
+                bool result = _waitQueue.TryPeek(out task);
                 if (result && task != null)
                 {
                     try
@@ -77,11 +78,12 @@ namespace Core.Services
                     }
                     catch (OperationCanceledException)
                     {
-                        return;
+                        break;
                     }
                     finally
                     {
                         _semaphore.Release();
+                        _waitQueue.TryDequeue(out _);
                     }
                 }
             }
