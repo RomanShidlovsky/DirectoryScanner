@@ -11,12 +11,12 @@
 
         private long GetLength(Node node)
         {
-            if (node.Childs == null)
+            if (node.Children == null)
             {
                 return node.Length;
             }
 
-            foreach (var child in node.Childs)
+            foreach (var child in node.Children)
             {
                 node.Length += GetLength(child);
             }
