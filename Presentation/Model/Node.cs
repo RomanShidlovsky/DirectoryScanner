@@ -19,12 +19,5 @@ namespace Presentation.Model
             Children = children;
             IcoPath = IsDirectory ? "Resources/folder.png" : "Resources/file.png";
         }
-
-        public Node(string name, long length, double sizeInPercent, ObservableCollection<Node>? childs) 
-            : this(name, length, sizeInPercent, true, childs)
-        { }
-
-
-
     }
 }

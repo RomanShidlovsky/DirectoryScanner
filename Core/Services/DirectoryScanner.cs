@@ -52,7 +52,7 @@ namespace Core.Services
 
         private void ScanDirectory(Node node)
         {
-            node.Childs = new List<Node>();
+            node.Children = new List<Node>();
             var directoryInfo = new DirectoryInfo(node.FullName);
             var token = _tokenSource.Token;
 
@@ -77,7 +77,7 @@ namespace Core.Services
                     }
 
                     Node childNode = new Node(directory.FullName, directory.Name, true);
-                    node.Childs.Add(childNode);
+                    node.Children.Add(childNode);
                     Task task = new Task(() => ScanDirectory(childNode), token);
                     _taskQueue!.Enqueue(task);
                 }
@@ -103,7 +103,7 @@ namespace Core.Services
                         return;
                     }
                     Node childNode = new Node(file.FullName, file.Name, file.Length);
-                    node.Childs.Add(childNode);
+                    node.Children.Add(childNode);
                 }
             }
         }
