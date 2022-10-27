@@ -5,10 +5,14 @@ namespace Core.Services
 {
     public class DirectoryScanner : IDirectoryScanner
     {
-        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _tokenSource;
         private TaskQueue? _taskQueue;
         public bool IsRunning { get; private set; }
         
+        public DirectoryScanner()
+        {
+            _tokenSource = new CancellationTokenSource();
+        }
         public FileTree Start(string path, ushort maxThreadCount)
         {
             if (File.Exists(path))
@@ -28,6 +32,7 @@ namespace Core.Services
             }
 
             IsRunning = true;
+            _tokenSource = new CancellationTokenSource();
             _taskQueue = new TaskQueue(maxThreadCount, _tokenSource);
             var token = _tokenSource.Token;
             var directoryInfo = new DirectoryInfo(path);

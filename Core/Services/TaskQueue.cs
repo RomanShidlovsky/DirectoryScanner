@@ -74,11 +74,14 @@ namespace Core.Services
                     try
                     {
                         task.Wait(_token);
-                        _semaphore.Release();
                     }
                     catch (OperationCanceledException)
                     {
                         return;
+                    }
+                    finally
+                    {
+                        _semaphore.Release();
                     }
                 }
             }

@@ -6,21 +6,21 @@
         public FileTree(Node root)
         {
             Root = root;
-            Root.Lenght = GetLength(root);
+            Root.Length = GetLength(root);
         }
 
         private long GetLength(Node node)
         {
             if (node.Childs == null)
             {
-                return node.Lenght;
+                return node.Length;
             }
 
             foreach (var child in node.Childs)
             {
-                node.Lenght += GetLength(child);
+                node.Length += GetLength(child);
             }
-            return node.Lenght;
+            return node.Length;
         }
     }
 }

@@ -4,25 +4,102 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Presentation"
+        xmlns:self="clr-namespace:Presentation.Model"
+        xmlns:viewmodel="clr-namespace:Presentation.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:ApplicationViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Directory Scanner" Height="600" Width="1200">
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#e62747"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="MaxWidth" Value="250"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Setter Property="MaxHeight" Value="50"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="16" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#EAB01E"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#EAB01E"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#F1CA68"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#F1CA68"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="100" MaxWidth="250"/>
+            <ColumnDefinition Width="*" MinWidth="250" MaxWidth="350"/>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition MaxHeight="100"/>
-            <RowDefinition MaxHeight="100"/>
-            <RowDefinition MaxHeight="100"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <GridSplitter Grid.Column="1" Grid.RowSpan="2" ShowsPreview="False" Width="3"
-            HorizontalAlignment="Center" VerticalAlignment="Stretch" />
-        <Button Grid.Column="0" Grid.Row="0" MaxHeight="50" MaxWidth="160">Выбрать директорию</Button>
-        <Button Grid.Column="0" Grid.Row="1" MaxHeight="50" MaxWidth="160">Начать сканирование</Button>
-        <Button Grid.Column="0" Grid.Row="2" MaxHeight="50" MaxWidth="160">Остановить сканирование</Button>
-        <TreeView Grid.Column="2" Grid.Row="0" Grid.RowSpan="4"/>
+        <StackPanel Grid.Column="0" Background="#1b1c1c">
+            <Button Foreground="White" Margin="10 30 10 10" Command="{Binding SetDirectoryCommand}">Выбрать директорию</Button>
+            <Button Foreground="White" Margin="10" Command="{Binding StartScanningCommand}">Начать сканирование</Button>
+            <Button Foreground="White" Margin="10" Command="{Binding StopScanningCommand}">Остановить сканирование</Button>
+        </StackPanel>
+        <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
+            HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="Black"/>
+        <ScrollViewer Grid.Column="2">
+            <TreeView ItemsSource="{Binding Tree.Root.Children}" Background="#3e4040">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
+                        <StackPanel Orientation="Horizontal" Background="#3e4040">
+                            <Image Source="{Binding Path=IcoPath}" MaxHeight="20"></Image>
+                            <TextBlock FontFamily="Arial" FontSize="20" Foreground="White" Text="{Binding Name}"/>
+                            <TextBlock FontFamily="Arial" FontSize="20" Foreground="White" Text=" ("/>
+                            <TextBlock FontFamily="Arial" FontSize="20" Foreground="White" Text="{Binding Length}"/>
+                            <TextBlock FontFamily="Arial" FontSize="20" Foreground="White" Text=" bytes, "/>
+                            <TextBlock FontFamily="Arial" FontSize="20" Foreground="White" Text="{Binding SizeInPercent, StringFormat=N2}"/>
+                            <TextBlock FontFamily="Arial" FontSize="20" Foreground="White" Text="%)"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </ScrollViewer>
     </Grid>
 </Window>

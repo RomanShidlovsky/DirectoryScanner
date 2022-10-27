@@ -4,7 +4,7 @@
     {
         public string FullName { get; }
         public string Name { get; }
-        public long Lenght { get; set; }
+        public long Length { get; set; }
         public bool IsDirectory { get; }
         public List<Node>? Childs { get; set; }
 
@@ -15,9 +15,9 @@
             IsDirectory = isDirectory;
         }
 
-        public Node(string fullName, string name, long lenght) : this(fullName, name)
+        public Node(string fullName, string name, long length) : this(fullName, name)
         {
-           Lenght = lenght;
+           Length = length;
         }
 
         public Node(string fullName, string name, List<Node>? childs) : this(fullName, name, true)
