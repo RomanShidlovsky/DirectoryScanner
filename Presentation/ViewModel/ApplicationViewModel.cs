@@ -32,13 +32,14 @@ namespace Presentation.ViewModel
 
             StartScanningCommand = new RelayCommand(_ =>
             {
-                IsScanning = true;
                 Task.Run(() =>
                 {
+                    IsScanning = true;
                     Core.Models.FileTree result = _scanner.Start(DirectoryPath, MaxThreadCount);
-                    Tree = new Model.FileTree(result);
                     IsScanning = false;
+                    Tree = new Model.FileTree(result);
                 });
+               
             }, _ => _directoryPath != null && !IsScanning);
 
             StopScanningCommand = new RelayCommand(_ =>
@@ -82,7 +83,7 @@ namespace Presentation.ViewModel
 
         }
 
-        private bool _isScanning = false;
+        private volatile bool _isScanning = false;
         public bool IsScanning
         {
             get { return _isScanning; }

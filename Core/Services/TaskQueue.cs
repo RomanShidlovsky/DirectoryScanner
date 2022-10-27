@@ -4,7 +4,6 @@ namespace Core.Services
 {
     public class TaskQueue
     {
-        private ConcurrentQueue<Task> _startQueue;
         private ConcurrentQueue<Task> _waitQueue;
         private readonly SemaphoreSlim _semaphore;
         private readonly CancellationToken _token;
@@ -13,7 +12,6 @@ namespace Core.Services
 
         public TaskQueue(ushort maxThreadCount, CancellationTokenSource tokenSource)
         {
-            _startQueue = new ConcurrentQueue<Task>();
             _waitQueue = new ConcurrentQueue<Task>();
             _semaphore = new SemaphoreSlim(maxThreadCount);
             _token = tokenSource.Token;
@@ -23,7 +21,6 @@ namespace Core.Services
 
         public void Enqueue(Task task)
         {
-            _startQueue.Enqueue(task);
             _waitQueue.Enqueue(task);
         }
 
@@ -47,19 +44,20 @@ namespace Core.Services
             Task? task;
             while(!_waitNext.IsCompleted && !_token.IsCancellationRequested)
             {
-                bool result = _startQueue.TryDequeue(out task);
-                if (result && task != null)
+                task = _waitQueue.Where(t => t.Status == TaskStatus.Created).FirstOrDefault();
+                if (task != null)
                 {
                     try
                     {
                         _semaphore.Wait(_token);
                         task.Start();
                     }
-                    catch(OperationCanceledException)
+                    catch (OperationCanceledException)
                     {
-                        return;
+                        break;
                     }
-                }           
+                    
+                }
             }
         }
 
@@ -68,7 +66,7 @@ namespace Core.Services
             Task? task;
             while (!_waitQueue.IsEmpty && !_token.IsCancellationRequested)
             {
-                bool result = _waitQueue.TryDequeue(out task);
+                bool result = _waitQueue.TryPeek(out task);
                 if (result && task != null)
                 {
                     try
@@ -77,11 +75,12 @@ namespace Core.Services
                     }
                     catch (OperationCanceledException)
                     {
-                        return;
+                        break;
                     }
                     finally
                     {
                         _semaphore.Release();
+                        _waitQueue.TryDequeue(out _);
                     }
                 }
             }
