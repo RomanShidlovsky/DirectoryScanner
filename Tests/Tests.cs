@@ -1,7 +1,6 @@
 using Core.Interfaces;
 using Core.Models;
 using Core.Services;
-using System.Diagnostics;
 
 namespace Tests
 {

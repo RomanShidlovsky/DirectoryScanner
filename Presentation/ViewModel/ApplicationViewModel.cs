@@ -6,7 +6,6 @@ using Core.Services;
 using Core.Interfaces;
 using Presentation.Command;
 
-
 namespace Presentation.ViewModel
 {
     public class ApplicationViewModel : INotifyPropertyChanged

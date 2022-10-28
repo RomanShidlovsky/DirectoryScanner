@@ -13,6 +13,7 @@ namespace Core.Services
         {
             _tokenSource = new CancellationTokenSource();
         }
+
         public FileTree Start(string path, ushort maxThreadCount)
         {
             if (File.Exists(path))

@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace Presentation.Model
 {
@@ -33,7 +31,6 @@ namespace Presentation.Model
                         SetChilds(child, newNode);
                     }
                     dtoNode.Children.Add(newNode);
-
                 }
             }            
         }
