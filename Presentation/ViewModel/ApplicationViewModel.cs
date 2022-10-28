@@ -3,16 +3,16 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.Services;
-using Core.Models;
+using Core.Interfaces;
 using Presentation.Command;
-using Presentation.Model; 
+
 
 namespace Presentation.ViewModel
 {
     public class ApplicationViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        private readonly DirectoryScanner _scanner = new DirectoryScanner();
+        private readonly IDirectoryScanner _scanner = new DirectoryScanner();
 
         public RelayCommand SetDirectoryCommand { get; }
         public RelayCommand StartScanningCommand { get; }
@@ -49,8 +49,8 @@ namespace Presentation.ViewModel
             }, _ => IsScanning);
         }
 
-        private string _directoryPath;
-        public string DirectoryPath
+        private string? _directoryPath;
+        public string? DirectoryPath
         {
             get { return _directoryPath; }
             set
