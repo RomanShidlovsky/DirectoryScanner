@@ -1,5 +1,4 @@
 # DirectoryScanner
-WPF application to analyze the size ratio of files and directories within a selected directory in multi-threaded mode.
 Необходимо реализовать графическую утилиту с использованием WPF для анализа соотношения размера файлов и каталогов внутри выбранного каталога в многопоточном режиме.
 
 Пользовательский интерфейс
